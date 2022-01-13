@@ -1,0 +1,9 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+.inputLabel{
+    @apply block text-sm text-gray-700 mb-1 capitalize
+}
+.inputField{
+    @apply block w-full rounded-md
+}
