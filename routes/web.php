@@ -2,18 +2,9 @@
 
 use App\Http\Controllers\BlogController;
 use App\Models\Blog;
+use Flasher\Laravel\Facade\Flasher;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 
 // Fronend
@@ -45,8 +36,10 @@ Route::prefix('dashboard')->group(function () {
     Route::get('blog/create', [BlogController::class, 'create'])->middleware(['auth'])->name('admin-blog-create');
     Route::post('blog/store', [BlogController::class, 'store'])->middleware(['auth'])->name('admin-blog-store');
     Route::delete('blog/{id}', [BlogController::class, 'destroy'])->middleware(['auth'])->name('admin-blog-delete');
-    Route::get('blog/edit/{slug}', [BlogController::class, 'edit'])->middleware(['auth'])->name('admin-blog-edit');
+    Route::get('blog/edit/{id}', [BlogController::class, 'edit'])->middleware(['auth'])->name('admin-blog-edit');
     Route::put('blog/update/{id}', [BlogController::class, 'update'])->middleware(['auth'])->name('admin-blog-update');
+
+
 });
 
 

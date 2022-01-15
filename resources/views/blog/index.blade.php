@@ -32,7 +32,8 @@
                               <td class="border flex-1 px-2 py-1">{{ $blog->slug }}</td>
 
                               <td class="border px-2 py-1 flex justify-center items-center w-40">
-                                  <a href="{{ route('admin-blog-edit', $blog->slug) }}" class="inline-block px-3 py-2 bg-green-800 text-white rounded-md mx-1">Edit</a>
+                                  <a href="{{ route('admin-blog-edit', $blog->id) }}" class="inline-block px-3 py-2 bg-green-800 text-white rounded-md mx-1">Edit</a>
+                                  <a target="_blank" href="{{ route('single-blog', $blog->slug) }}" class="inline-block px-3 py-2 bg-blue-500 text-white rounded-md mx-1">View</a>
                                   <form action="{{ route('admin-blog-delete', $blog->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to delete?')">
                                     @csrf
                                     @method('DELETE')
