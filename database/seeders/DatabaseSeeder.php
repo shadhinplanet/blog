@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Blog;
+use App\Models\Media;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -22,6 +23,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Blog::factory(50)->create();
-
+        Media::factory(500)->create();
     }
 }

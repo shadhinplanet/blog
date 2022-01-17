@@ -6,18 +6,20 @@ Blog | Home
 <section class="tm-section">
     <div class="container-fluid">
         <div class="row">
-
+            @php
+            function getFileUrl($name){
+                if(str_starts_with($name, 'http')){
+                    return $name;
+                }
+                return url('storage/uploads/'.$name);
+            }
+            @endphp
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9 col-xl-9">
-
-
-
-
-
                 @if ( $blogs->currentPage() === 1)
 
                 <div class="tm-blog-post">
                     <h3 class="tm-gold-text">{{ $blogs->first()->name }}</h3>
-                    <img src="{{ $blogs->first()->featured_image }}" width="100%" alt="Image"
+                    <img src="{{ getFileUrl($blogs->first()->featured_image) }}" width="100%" alt="Image"
                         class="img-fluid tm-img-post">
 
                     <p><small>Published {{ $blogs->first()->created_at->diffForHumans() }}</small></p>
@@ -40,7 +42,7 @@ Blog | Home
                         flex-direction: column;
                         justify-content: space-between;">
                             <div class=""
-                                style="background-image: url({{ $blog->featured_image }}); flex:1; min-height:200px;margin-bottom:15px">
+                                style="background-image: url({{ getFileUrl($blog->featured_image) }}); flex:1; min-height:200px;margin-bottom:15px">
                             </div>
                             <p><small>Published {{ $blog->created_at->diffForHumans() }}</small></p>
                             <h4 class="tm-margin-b-20 tm-gold-text">{{ $blog->name }}</h4>
