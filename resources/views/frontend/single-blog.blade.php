@@ -10,13 +10,20 @@ Blog | {{ $blog->name }}
 
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9 col-xl-9">
 
-
+                @php
+                function getFileUrl($name){
+                    if(str_starts_with($name, 'http')){
+                        return $name;
+                    }
+                    return url('storage/uploads/'.$name);
+                }
+                @endphp
 
 
 
                 <div class="tm-blog-post">
                     <h3 class="tm-gold-text">{{ $blog->name }}</h3>
-                    <img src="{{ $blog->featured_image }}" width="100%" alt="Image"
+                    <img src="{{ getFileUrl($blog->featured_image) }}" width="100%" alt="Image"
                         class="img-fluid tm-img-post">
                     <p>{!!  $blog->description !!}</p>
                 </div>

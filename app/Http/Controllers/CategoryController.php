@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Category;
+use Flasher\Laravel\Facade\Flasher;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+class CategoryController extends Controller
+{
+    public function index()
+    {
+        return view('category.index')->with([
+            'categories' => Category::orderBy('name','ASC')->get(),
+        ]);
+    }
+
+    public function create()
+    {
+        return view('category.create');
+    }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name'  => 'required|max:255|unique:categories,name'
+        ]);
+
+        $slug = Str::slug($request->name);
+        Category::create([
+            'name'  => $request->name,
+            'slug'  => $slug,
+        ]);
+
+        Flasher::addSuccess('Category Created!');
+
+        return redirect()->route('admin-categories');
+    }
+    public function edit($id)
+    {
+        $category = Category::find($id);
+        return view('category.edit')->with(['category'=>$category]);
+    }
+    public function update(Request $request,$id)
+    {
+        $request->validate([
+            'name'  => 'required|max:255'
+        ]);
+
+        $slug = Str::slug($request->name);
+        Category::find($id)->update([
+            'name'  => $request->name,
+            'slug'  => $slug,
+        ]);
+
+        Flasher::addSuccess('Category Updated!');
+
+        return redirect()->route('admin-categories');
+    }
+    public function destroy($id)
+    {
+        Category::find($id)->delete();
+        Flasher::addSuccess('Category Deleted!');
+        return redirect()->route('admin-categories');
+    }
+}

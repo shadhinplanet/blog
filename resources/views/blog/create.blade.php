@@ -29,12 +29,32 @@
                             <p class="bg-red-100 text-red-500 px-3 py-1 mt-1 text-sm rounded-md">{{ $message }}</p>
                             @enderror
                         </div>
-                        <div class="mt-5">
+                        <div class="mt-5 flex ">
+                           <div class="">
                             <label for="featured_image" class="inputLabel">Fetured Image</label>
                             <input type="file" name="featured_image" id="featured_image" value="{{ old('featured_image') }}">
                             @error('featured_image')
                             <p class="bg-red-100 text-red-500 px-3 py-1 mt-1 text-sm rounded-md">{{ $message }}</p>
                             @enderror
+                           </div>
+                           <div class="ml-10">
+                            <label for="category_id" class="inputLabel">Category</label>
+                            <select name="category_id" id="category_id" class="inputField">
+                                <option value="none">Select Category</option>
+
+                                @foreach ($categories as $category)
+                                <option {{ $category->id == old('category_id') ? 'selected' :'' }} value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+
+
+                            </select>
+
+                            @error('category_id')
+                            <p class="bg-red-100 text-red-500 px-3 py-1 mt-1 text-sm rounded-md">{{ $message }}</p>
+                            @enderror
+
+
+                           </div>
                         </div>
                         <div class="mt-5">
                             <button type="submit" class="px-3 py-2 bg-indigo-500 text-white inline-block">Create</button>

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 class BlogFactory extends Factory
@@ -19,6 +20,7 @@ class BlogFactory extends Factory
             'name'  => $name,
             'slug'  => Str::slug($name),
             'featured_image'  => 'https://picsum.photos/500/300?random='. rand(2,6565),
+            'category_id'  => Category::all()->random()->id,
             'description'  => '<h3>'.$this->faker->sentence().'</h3>' . '<p>' . $this->faker->paragraphs(5,true) . '</p>',
         ];
     }

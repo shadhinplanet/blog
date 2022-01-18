@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Category;
 use Flasher\Laravel\Facade\Flasher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,14 +14,14 @@ class BlogController extends Controller
     //Index
     public function index()
     {
-        $data = Blog::latest()->paginate();
+        $data = Blog::with('category')->latest()->paginate();
         return view('blog.index')->with(['blogs' => $data]);
     }
 
     // Create
     public function create()
     {
-        return view('blog.create');
+        return view('blog.create')->with(['categories' => Category::all()]);
     }
 
 
@@ -30,34 +31,21 @@ class BlogController extends Controller
     public function store(Request $request)
     {
 
-        if (!empty($request->file('featured_image'))) {
+        $request->validate([
+            'name'  => ['required', 'min:5', 'max:255'],
+            'description' => 'required',
+            'featured_image' => 'required|mimes:jpg,bmp,png',
+            'category_id' => 'required|not_in:none'
+        ]);
 
-            $validation = [
-                'name'  => ['required', 'min:5', 'max:255'],
-                'description' => 'required',
-                'featured_image' => 'mimes:jpg,bmp,png'
-            ];
-            $request->validate($validation);
-
-            $image = time() . "-" . $request->featured_image->getClientOriginalName();
-            $request->file('featured_image')->storeAs('public/uploads/', $image);
-        } else {
-            $validation = [
-                'name'  => ['required', 'min:5', 'max:255'],
-                'description' => 'required'
-            ];
-            $request->validate($validation);
-            $image = 'https://picsum.photos/500/300?random=' . rand(5, 500);
-
-        }
-
-
-
+        $image = time() . "-" . $request->featured_image->getClientOriginalName();
+        $request->file('featured_image')->storeAs('public/uploads/', $image);
 
         Blog::create([
             'name'           => $request->name,
             'slug'           => Str::slug($request->name),
             'featured_image' => $image,
+            'category_id' => $request->category_id,
             'description'    => $request->description,
         ]);
         Flasher::addSuccess('Blog Created');
@@ -98,9 +86,6 @@ class BlogController extends Controller
             $request->validate($validation);
             $image = $blog->featured_image;
         }
-
-
-
 
         $blog->update([
             'name'           => $request->name,
