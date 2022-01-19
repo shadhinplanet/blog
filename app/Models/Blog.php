@@ -10,9 +10,9 @@ class Blog extends Model
     use HasFactory;
     protected $guarded = ['id','created_at','updated_at'];
 
-    public function category()
+    public function categories()
     {
-        return $this->belongsTo(Category::class,'category_id','id');
+        return $this->belongsToMany(Category::class,'blogs_categories','blog_id','category_id');
     }
 
 }

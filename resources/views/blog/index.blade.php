@@ -19,7 +19,7 @@
                                 <th class="border w-20 px-2 py-1">Image</th>
                                 <th class="border flex-1 px-2 py-1">Name</th>
                                 <th class="border flex-1 px-2 py-1">Slug</th>
-                                <th class="border flex-1 px-2 py-1">Category</th>
+                                <th class="border flex-1 px-2 py-1">Categories</th>
 
                                 <th class="border px-2 py-1 flex-1 ">Action</th>
                             </tr>
@@ -38,16 +38,18 @@
                             <tr class="border-b flex">
 
 
-
-                                {{-- <td class="border w-20 px-2 py-1"><img
-                                        src="{{ asset('storage/uploads') . '/' . $blog->featured_image }}" width="80"
-                                        alt=""></td> --}}
                                 <td class="border w-20 px-2 py-1"><img src="{{ getFileUrl($blog->featured_image) }}"
                                         width="80" alt=""></td>
 
                                 <td class="border flex-1 px-2 py-1">{{ $blog->name }}</td>
                                 <td class="border flex-1 px-2 py-1">{{ $blog->slug }}</td>
-                                <td class="border flex-1 px-2 py-1">{{ $blog->category->name }}</td>
+                                <td class="border flex-1 px-2 py-1">
+                                    @foreach ($blog->categories as $item)
+                                    <a class="bg-blue-500 rounded-md inline-flex px-2 py-1 text-white text-xs" href="{{ route('admin-category-blogs', $item->slug) }}">{{ $item->name }}</a>
+                                    @endforeach
+
+
+                                </td>
 
                                 <td class="border px-2 py-1 flex justify-center items-center flex-1">
                                     <a href="{{ route('admin-blog-edit', $blog->id) }}"

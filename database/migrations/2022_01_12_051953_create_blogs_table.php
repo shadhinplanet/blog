@@ -18,13 +18,18 @@ class CreateBlogsTable extends Migration
             $table->string('name')->unique();
             $table->string('slug');
             $table->string('featured_image');
-            $table->foreignId('category_id');
             $table->longText('description')->nullable();
             $table->timestamps();
 
 
             // $table->foreign('category_id')->references('id')->on('categories');
         });
+
+        Schema::create('blogs_categories', function (Blueprint $table) {
+            $table->integer('blog_id');
+            $table->integer('category_id');
+        });
+
     }
 
     /**

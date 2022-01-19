@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
 use App\Models\Category;
 use Flasher\Laravel\Facade\Flasher;
 use Illuminate\Http\Request;
@@ -11,8 +12,10 @@ class CategoryController extends Controller
 {
     public function index()
     {
+        $categories = Category::with('blogs')->orderBy('name','ASC')->get();
+        // dd($categories);
         return view('category.index')->with([
-            'categories' => Category::orderBy('name','ASC')->get(),
+            'categories' => $categories,
         ]);
     }
 
@@ -38,7 +41,7 @@ class CategoryController extends Controller
     }
     public function edit($id)
     {
-        $category = Category::find($id);
+        $category = Category::find($id)->with('blogs');
         return view('category.edit')->with(['category'=>$category]);
     }
     public function update(Request $request,$id)
@@ -63,4 +66,16 @@ class CategoryController extends Controller
         Flasher::addSuccess('Category Deleted!');
         return redirect()->route('admin-categories');
     }
+
+
+    public function getBlogByCategory($slug)
+    {
+        $category = Category::where('slug',$slug)->with('blogs')->first();
+        // dd($category);
+        return view('blog.view')->with([
+            'category' => $category,
+        ]);
+    }
+
+
 }

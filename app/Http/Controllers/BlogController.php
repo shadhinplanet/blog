@@ -14,7 +14,7 @@ class BlogController extends Controller
     //Index
     public function index()
     {
-        $data = Blog::with('category')->latest()->paginate();
+        $data = Blog::with('categories')->latest()->paginate();
         return view('blog.index')->with(['blogs' => $data]);
     }
 
@@ -30,24 +30,26 @@ class BlogController extends Controller
     // Store
     public function store(Request $request)
     {
-
+        // dd($request->all());
         $request->validate([
             'name'  => ['required', 'min:5', 'max:255'],
             'description' => 'required',
             'featured_image' => 'required|mimes:jpg,bmp,png',
-            'category_id' => 'required|not_in:none'
         ]);
 
         $image = time() . "-" . $request->featured_image->getClientOriginalName();
         $request->file('featured_image')->storeAs('public/uploads/', $image);
 
-        Blog::create([
+        $blog = Blog::create([
             'name'           => $request->name,
             'slug'           => Str::slug($request->name),
             'featured_image' => $image,
-            'category_id' => $request->category_id,
             'description'    => $request->description,
         ]);
+
+        $blog->categories()->attach($request->category_id);
+
+
         Flasher::addSuccess('Blog Created');
         return redirect()->route('admin-blogs');
     }
@@ -56,10 +58,12 @@ class BlogController extends Controller
     // Edit page
     public function edit($id)
     {
-        $blog = Blog::find($id);
-        // $blog = Blog::where('slug', '=', $slug)->get()->first();
+        $blog = Blog::with('categories')->find($id);
 
-        return view('blog.edit')->with('blog', $blog);
+        return view('blog.edit')->with([
+            'blog'=> $blog,
+            'categories' => Category::all()
+        ]);
     }
 
     // Update
@@ -70,7 +74,7 @@ class BlogController extends Controller
             $validation = [
                 'name'  => ['required', 'min:5', 'max:255'],
                 'description' => 'required',
-                'featured_image' => 'mimes:jpg,bmp,png'
+                'featured_image' => 'mimes:jpg,bmp,png',
             ];
             $request->validate($validation);
             $image = time() . "-" . $request->featured_image->getClientOriginalName();
@@ -81,7 +85,7 @@ class BlogController extends Controller
         } else {
             $validation = [
                 'name'  => ['required', 'min:5', 'max:255'],
-                'description' => 'required'
+                'description' => 'required',
             ];
             $request->validate($validation);
             $image = $blog->featured_image;
@@ -93,6 +97,9 @@ class BlogController extends Controller
             'featured_image' => $image,
             'description'    => $request->description,
         ]);
+
+        $blog->categories()->sync($request->category_id);
+
 
         Flasher::addSuccess('Blog Updated');
         return redirect()->route('admin-blogs');

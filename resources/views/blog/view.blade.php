@@ -2,9 +2,9 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Category') }}
+                Blogs from <strong class="font-black text-purple-500">{{ $category->name }}</strong> Category
             </h2>
-            <a href="{{ route('admin-category-create') }}"
+            <a href="{{ route('admin-blog-create') }}"
                 class="inline-block px-3 py-2 bg-blue-500 text-white rounded-md hover:bg-indigo-500">Add New</a>
         </div>
     </x-slot>
@@ -16,24 +16,42 @@
                     <table class="w-full">
                         <thead>
                             <tr class="border-b flex">
+                                <th class="border w-20 px-2 py-1">Image</th>
                                 <th class="border flex-1 px-2 py-1">Name</th>
                                 <th class="border flex-1 px-2 py-1">Slug</th>
-                                <th class="border flex-1 px-2 py-1">Blogs</th>
                                 <th class="border px-2 py-1 flex-1 ">Action</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                            function getFileUrl($name){
+                                if(str_starts_with($name, 'http')){
+                                    return $name;
+                                }
+                                return url('storage/uploads/'.$name);
+                            }
+                            @endphp
 
-                            @forelse ($categories as $category)
+                            @forelse ($category->blogs as $blog)
                             <tr class="border-b flex">
-                                <td class="border flex-1 px-2 py-1">{{ $category->name }}</td>
-                                <td class="border flex-1 px-2 py-1">{{ $category->slug }}</td>
-                                <td class="border flex-1 px-2 py-1 text-center"><a class="bg-purple-500 w-8 h-8 text-white leading-8 rounded-full inline-block" href="{{ route('admin-category-blogs', $category->slug) }}">{{ count($category->blogs) }}</a></td>
-                                <td class="border px-2 py-1 flex justify-center items-center flex-1">
-                                    <a href="{{ route('admin-category-edit', $category->id) }}"
-                                        class="inline-block px-3 py-2 bg-green-800 text-white rounded-md mx-1">Edit</a>
 
-                                    <form action="{{ route('admin-category-delete', $category->id) }}" method="POST"
+
+
+                                {{-- <td class="border w-20 px-2 py-1"><img
+                                        src="{{ asset('storage/uploads') . '/' . $blog->featured_image }}" width="80"
+                                        alt=""></td> --}}
+                                <td class="border w-20 px-2 py-1"><img src="{{ getFileUrl($blog->featured_image) }}"
+                                        width="80" alt=""></td>
+
+                                <td class="border flex-1 px-2 py-1">{{ $blog->name }}</td>
+                                <td class="border flex-1 px-2 py-1">{{ $blog->slug }}</td>
+
+                                <td class="border px-2 py-1 flex justify-center items-center flex-1">
+                                    <a href="{{ route('admin-blog-edit', $blog->id) }}"
+                                        class="inline-block px-3 py-2 bg-green-800 text-white rounded-md mx-1">Edit</a>
+                                    <a target="_blank" href="{{ route('single-blog', $blog->slug) }}"
+                                        class="inline-block px-3 py-2 bg-blue-500 text-white rounded-md mx-1">View</a>
+                                    <form action="{{ route('admin-blog-delete', $blog->id) }}" method="POST"
                                         onsubmit="return confirm('Are you sure you want to delete?')">
                                         @csrf
                                         @method('DELETE')
@@ -45,7 +63,7 @@
                             </tr>
                             @empty
                             <tr class="border-b flex justify-center">
-                                <td colspan="5" class="p-4">No Category Found</td>
+                                <td colspan="5" class="p-4">No Blogs Found</td>
                             </tr>
                             @endforelse
 
@@ -56,6 +74,7 @@
                 </div>
 
             </div>
+
         </div>
     </div>
 </x-app-layout>

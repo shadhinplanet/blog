@@ -23,20 +23,21 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('123'),
         ]);
 
-        Category::create([
-            'name'  => 'Blog Post',
-            'slug'  => 'blog-post'
-        ]);
-        Category::create([
-            'name'  => 'Tech',
-            'slug'  => 'tech'
-        ]);
-        Category::create([
-            'name'  => 'Bangladesh',
-            'slug'  => 'bangladesh'
-        ]);
+        Category::factory(10)->create();
 
-        Blog::factory(50)->create();
+        Blog::factory(50)->create()->each(function($blog){
+            $blog->categories()->attach([
+                Category::all()->random()->id,
+                Category::all()->random()->id,
+                Category::all()->random()->id,
+                Category::all()->random()->id,
+                Category::all()->random()->id,
+                Category::all()->random()->id,
+            ]);
+        });
+
+
+
         // Media::factory(500)->create();
     }
 }

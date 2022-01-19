@@ -39,15 +39,19 @@
                            </div>
                            <div class="ml-10">
                             <label for="category_id" class="inputLabel">Category</label>
-                            <select name="category_id" id="category_id" class="inputField">
+                          <div class="grid grid-col-2">
+                            @foreach ($categories as $category)
+                            <label for="category-{{ $category->id  }}" class="inputLabel inline-block">
+                                <input type="checkbox" name="category_id[]" id="category-{{ $category->id  }}" value="{{ $category->id }}">
+                                {{ $category->name }}</label>
+                            @endforeach
+                          </div>
+                            {{-- <select name="category_id" id="category_id" class="inputField">
                                 <option value="none">Select Category</option>
-
                                 @foreach ($categories as $category)
                                 <option {{ $category->id == old('category_id') ? 'selected' :'' }} value="{{ $category->id }}">{{ $category->name }}</option>
                                 @endforeach
-
-
-                            </select>
+                            </select> --}}
 
                             @error('category_id')
                             <p class="bg-red-100 text-red-500 px-3 py-1 mt-1 text-sm rounded-md">{{ $message }}</p>

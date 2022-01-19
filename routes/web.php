@@ -3,6 +3,7 @@
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
 use App\Models\Blog;
+use App\Models\Category;
 use Flasher\Laravel\Facade\Flasher;
 use Illuminate\Support\Facades\Route;
 
@@ -11,13 +12,19 @@ use Illuminate\Support\Facades\Route;
 // Fronend
 Route::get('/', function () {
     $blogs = Blog::orderBy('id', 'desc')->paginate(10);
-    return view('frontend.home')->with('blogs', $blogs );
+    return view('frontend.home')->with([
+        'blogs' => $blogs,
+        'categories' => Category::all(),
+    ]);
 })->name('home');
 
 Route::get('/blog/{slug}', function($slug){
-    $blog = Blog::where('slug','=',$slug)->get()->first();
+    $blog = Blog::where('slug','=',$slug)->with('categories')->get()->first();
 
-    return view('frontend.single-blog')->with('blog',$blog);
+    return view('frontend.single-blog')->with([
+        'blog' => $blog,
+        'categories' => Category::all(),
+    ]);
 
 })->name('single-blog');
 
@@ -47,6 +54,7 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::get('category/edit/{id}', [CategoryController::class, 'edit'])->name('admin-category-edit');
     Route::put('category/update/{id}', [CategoryController::class, 'update'])->name('admin-category-update');
 
+    Route::get('category/{slug}', [CategoryController::class, 'getBlogByCategory'])->name('admin-category-blogs');
 
 
 });
