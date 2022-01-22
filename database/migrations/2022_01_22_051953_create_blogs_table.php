@@ -15,20 +15,21 @@ class CreateBlogsTable extends Migration
     {
         Schema::create('blogs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('category_id')->nullable();
             $table->string('name')->unique();
             $table->string('slug');
-            $table->string('featured_image');
+            $table->string('featured_image')->nullable();
             $table->longText('description')->nullable();
             $table->timestamps();
 
 
-            // $table->foreign('category_id')->references('id')->on('categories');
+            $table->foreign('category_id')->references('id')->on('categories');
         });
 
-        Schema::create('blogs_categories', function (Blueprint $table) {
-            $table->integer('blog_id');
-            $table->integer('category_id');
-        });
+        // Schema::create('blogs_categories', function (Blueprint $table) {
+        //     $table->integer('blog_id');
+        //     $table->integer('category_id');
+        // });
 
     }
 

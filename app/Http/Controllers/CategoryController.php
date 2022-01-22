@@ -12,10 +12,10 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('blogs')->orderBy('name','ASC')->get();
+        $categories = Category::orderBy('name','ASC')->get();
         // dd($categories);
         return view('category.index')->with([
-            'categories' => $categories,
+            'categories' => $categories->load('blogs'),
         ]);
     }
 

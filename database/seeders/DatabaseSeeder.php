@@ -26,14 +26,14 @@ class DatabaseSeeder extends Seeder
         Category::factory(10)->create();
 
         Blog::factory(50)->create()->each(function($blog){
-            $blog->categories()->attach([
-                Category::all()->random()->id,
-                Category::all()->random()->id,
-                Category::all()->random()->id,
-                Category::all()->random()->id,
-                Category::all()->random()->id,
-                Category::all()->random()->id,
-            ]);
+            // $blog->categories()->attach([
+            //     Category::all()->random()->id,
+            //     Category::all()->random()->id,
+            //     Category::all()->random()->id,
+            //     Category::all()->random()->id,
+            //     Category::all()->random()->id,
+            //     Category::all()->random()->id,
+            // ]);
         });
 
 

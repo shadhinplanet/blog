@@ -14,14 +14,16 @@ class BlogController extends Controller
     //Index
     public function index()
     {
-        $data = Blog::with('categories')->latest()->paginate();
+        $data = Blog::latest()->paginate();
         return view('blog.index')->with(['blogs' => $data]);
     }
 
     // Create
     public function create()
     {
-        return view('blog.create')->with(['categories' => Category::all()]);
+        return view('blog.create')->with([
+            'categories' => Category::all()
+        ]);
     }
 
 
@@ -34,20 +36,26 @@ class BlogController extends Controller
         $request->validate([
             'name'  => ['required', 'min:5', 'max:255'],
             'description' => 'required',
-            'featured_image' => 'required|mimes:jpg,bmp,png',
+            // 'featured_image' => 'required|mimes:jpg,bmp,png',
         ]);
 
-        $image = time() . "-" . $request->featured_image->getClientOriginalName();
-        $request->file('featured_image')->storeAs('public/uploads/', $image);
+        if(!empty($request->file('featured_image'))){
+            $image = time() . "-" . $request->featured_image->getClientOriginalName();
+            $request->file('featured_image')->storeAs('public/uploads/', $image);
+        }else{
+            $image = "https://picsum.photos/300?random=".rand(5,500);
+        }
+
 
         $blog = Blog::create([
             'name'           => $request->name,
+            'category_id'    => $request->category_id,
             'slug'           => Str::slug($request->name),
             'featured_image' => $image,
             'description'    => $request->description,
         ]);
 
-        $blog->categories()->attach($request->category_id);
+        // $blog->categories()->attach($request->category_id);
 
 
         Flasher::addSuccess('Blog Created');
@@ -62,7 +70,6 @@ class BlogController extends Controller
 
         return view('blog.edit')->with([
             'blog'=> $blog,
-            'categories' => Category::all()
         ]);
     }
 

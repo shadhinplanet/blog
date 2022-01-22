@@ -14,7 +14,6 @@ Route::get('/', function () {
     $blogs = Blog::orderBy('id', 'desc')->paginate(10);
     return view('frontend.home')->with([
         'blogs' => $blogs,
-        'categories' => Category::all(),
     ]);
 })->name('home');
 
@@ -23,7 +22,6 @@ Route::get('/blog/{slug}', function($slug){
 
     return view('frontend.single-blog')->with([
         'blog' => $blog,
-        'categories' => Category::all(),
     ]);
 
 })->name('single-blog');
