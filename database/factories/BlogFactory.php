@@ -18,7 +18,6 @@ class BlogFactory extends Factory
 
         return [
             'name'  => $name,
-            'category_id'  => Category::all()->random()->id,
             'slug'  => Str::slug($name),
             'featured_image'  => 'https://picsum.photos/500/300?random='. rand(2,6565),
             'description'  => '<h3>'.$this->faker->sentence().'</h3>' . '<p>' . $this->faker->paragraphs(5,true) . '</p>',

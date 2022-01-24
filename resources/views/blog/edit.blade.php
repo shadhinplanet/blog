@@ -61,10 +61,11 @@
                                     <div class="grid grid-cols-2 gap-x-4">
                                         @foreach ($categories as $category)
                                         <label for="category-{{ $category->id  }}" class="inputLabel inline-block">
-                                            <input type="checkbox" @foreach ($blog->categories as $item)
+                                            <input type="checkbox"
+                                            @foreach ($blog->categories as $item)
                                             {{ $category->id == $item->id ? 'checked':'' }}
                                             @endforeach
-                                            name="category_id[]" id="category-{{ $category->id }}" value="{{
+                                            name="categories[]" id="category-{{ $category->id }}" value="{{
                                             $category->id }}">
                                             {{ $category->name }}</label>
                                         @endforeach

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\FrontEndController;
 use App\Models\Blog;
 use App\Models\Category;
 use Flasher\Laravel\Facade\Flasher;
@@ -10,21 +12,11 @@ use Illuminate\Support\Facades\Route;
 
 
 // Fronend
-Route::get('/', function () {
-    $blogs = Blog::orderBy('id', 'desc')->paginate(10);
-    return view('frontend.home')->with([
-        'blogs' => $blogs,
-    ]);
-})->name('home');
+Route::get('/', [FrontEndController::class, 'index'])->name('home');
 
-Route::get('/blog/{slug}', function($slug){
-    $blog = Blog::where('slug','=',$slug)->with('categories')->get()->first();
-
-    return view('frontend.single-blog')->with([
-        'blog' => $blog,
-    ]);
-
-})->name('single-blog');
+Route::get('/blog/{slug}', [FrontEndController::class, 'singleBlog'])->name('single-blog');
+Route::get('/contact', [FrontEndController::class, 'contact'])->name('contact');
+Route::post('/contact/store', [FrontEndController::class, 'contactStore'])->name('contact-store');
 
 
 
@@ -53,6 +45,12 @@ Route::prefix('dashboard')->middleware(['auth'])->group(function () {
     Route::put('category/update/{id}', [CategoryController::class, 'update'])->name('admin-category-update');
 
     Route::get('category/{slug}', [CategoryController::class, 'getBlogByCategory'])->name('admin-category-blogs');
+
+
+    Route::resource('contact', ContactController::class);
+
+    // Route::get('contacts', [ContactController::class,'index'])->name('admin-contacts');
+    // Route::delete('contact/delete/{id}', [ContactController::class,'destoy'])->name('admin-contact-delete');
 
 
 });

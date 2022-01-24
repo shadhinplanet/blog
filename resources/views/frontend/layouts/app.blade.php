@@ -37,8 +37,8 @@
                                 <li class="nav-item {{ request()->is('/') ? 'active' : '' }}">
                                     <a href="{{ route('home') }}" class="nav-link">Home</a>
                                 </li>
-                                <li class="nav-item">
-                                    <a href="contact.html" class="nav-link">Contact</a>
+                                <li class="nav-item {{ request()->routeIs('contact') ? 'active' : '' }}">
+                                    <a href="{{ route('contact') }}" class="nav-link">Contact</a>
                                 </li>
                             </ul>
                         </div>
@@ -138,7 +138,7 @@
                 </div>
             </div>
         </footer>
-
+        @flasher_render
         <!-- load JS files -->
         <script src="{{ asset('js/jquery-1.11.3.min.js') }}"></script>
         <script src="https://www.atlasestateagents.co.uk/javascript/tether.min.js"></script>

@@ -14,7 +14,7 @@ class BlogController extends Controller
     //Index
     public function index()
     {
-        $data = Blog::latest()->paginate();
+        $data = Blog::with('categories')->latest()->paginate();
         return view('blog.index')->with(['blogs' => $data]);
     }
 
@@ -49,11 +49,12 @@ class BlogController extends Controller
 
         $blog = Blog::create([
             'name'           => $request->name,
-            'category_id'    => $request->category_id,
             'slug'           => Str::slug($request->name),
             'featured_image' => $image,
             'description'    => $request->description,
         ]);
+
+        $blog->categories()->attach($request->categories);
 
         // $blog->categories()->attach($request->category_id);
 
@@ -70,6 +71,7 @@ class BlogController extends Controller
 
         return view('blog.edit')->with([
             'blog'=> $blog,
+            'categories'=> Category::all(),
         ]);
     }
 
@@ -105,7 +107,7 @@ class BlogController extends Controller
             'description'    => $request->description,
         ]);
 
-        $blog->categories()->sync($request->category_id);
+        $blog->categories()->sync($request->categories);
 
 
         Flasher::addSuccess('Blog Updated');
@@ -116,6 +118,7 @@ class BlogController extends Controller
     {
         $blog = Blog::find($id);
         Storage::delete('public/uploads/' . $blog->featured_image);
+
         $blog->delete();
         Flasher::addSuccess('Blog Deleted');
         return redirect()->route('admin-blogs');

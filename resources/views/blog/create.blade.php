@@ -46,7 +46,7 @@
                                 {{ $category->name }}</label>
                             @endforeach
                           </div> --}}
-                            <select name="category_id" id="category_id" class="inputField">
+                            <select name="categories[]" id="category_id" class="inputField" multiple>
                                 <option value="none">Select Category</option>
                                 @foreach ($categories as $category)
                                 <option {{ $category->id == old('category_id') ? 'selected' :'' }} value="{{ $category->id }}">{{ $category->name }}</option>

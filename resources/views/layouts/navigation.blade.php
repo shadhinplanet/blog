@@ -23,6 +23,9 @@
                     <x-nav-link :href="route('admin-categories')" :active="request()->routeIs('admin-categor*')">
                         {{ __('Category') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('contact.index')" :active="request()->is('/dashboard/contact')">
+                        {{ __('Messages') }}
+                    </x-nav-link>
                 </div>
             </div>
 

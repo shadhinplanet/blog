@@ -44,12 +44,11 @@
                                 <td class="border flex-1 px-2 py-1">{{ $blog->name }}</td>
                                 <td class="border flex-1 px-2 py-1">{{ $blog->slug }}</td>
                                 <td class="border flex-1 px-2 py-1">
-                                    {{ optional($blog->category)->name }}
-
-                                    {{-- @foreach ($blog->categories as $item)
+                                    {{-- {{ optional($blog->category)->name }} --}}
+                                    @foreach ($blog->categories as $item)
                                     <a class="bg-blue-500 rounded-md inline-flex px-2 py-1 text-white text-xs"
                                         href="{{ route('admin-category-blogs', $item->slug) }}">{{ $item->name }}</a>
-                                    @endforeach --}}
+                                    @endforeach
 
 
                                 </td>
